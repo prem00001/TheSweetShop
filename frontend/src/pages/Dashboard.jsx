@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import axios from 'axios'
 import SweetCard from '../components/SweetCard'
@@ -7,15 +8,31 @@ import SearchBar from '../components/SearchBar'
 
 const Dashboard = () => {
   const { user, logout, isAdmin } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
   const [sweets, setSweets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('')
   const [priceRange, setPriceRange] = useState({ min: '', max: '' })
   const [editingSweet, setEditingSweet] = useState(null)
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+
+  // Check for success message from payment page
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message)
+      // Clear message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage('')
+      }, 5000)
+      // Clear location state
+      window.history.replaceState({}, document.title)
+    }
+  }, [location.state])
 
   useEffect(() => {
     fetchSweets()
@@ -55,12 +72,11 @@ const Dashboard = () => {
     }
   }
 
-  const handlePurchase = async (sweetId) => {
-    try {
-      const response = await axios.post(`${API_URL}/sweets/${sweetId}/purchase`)
-      setSweets(sweets.map(s => s._id === sweetId ? response.data : s))
-    } catch (err) {
-      alert(err.response?.data?.message || 'Purchase failed')
+  const handlePurchase = (sweetId) => {
+    const sweet = sweets.find(s => s._id === sweetId)
+    if (sweet) {
+      // Redirect to payment page with sweet details
+      navigate('/payment', { state: { sweet } })
     }
   }
 
@@ -114,20 +130,38 @@ const Dashboard = () => {
   const categories = [...new Set(sweets.map(s => s.category))]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
-      <nav className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-bold text-purple-600">
-              🍬 Sweet Shop Management
-            </h1>
-            <div className="flex items-center gap-4">
-              <span className="text-gray-700">
-                Welcome, {user?.username} {isAdmin && '(Admin)'}
+    <div className="min-h-screen relative">
+      {/* Background image with overlay */}
+      <div 
+        className="fixed inset-0 bg-cover sm:bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('/bg-3.png')`,
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-50/40 via-purple-50/40 to-indigo-50/40 backdrop-blur-[2px]"></div>
+      </div>
+      <div className="relative z-10">
+      <nav className="bg-white/90 backdrop-blur-sm shadow-lg border-b border-purple-200">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 sm:py-0 sm:h-20 gap-3 sm:gap-0">
+            <div className="w-full sm:w-auto">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <img src="/logo.png" alt="Sweet Shop Logo" className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 object-contain" />
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  The Sweet Shop
+                </h1>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-600 italic mt-1">Welcome to The Sweet Shop</p>
+            </div>
+            <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 sm:gap-4">
+              <span className="text-xs sm:text-sm md:text-base text-gray-700 font-semibold truncate">
+                Welcome, <span className="text-purple-600">{user?.username}</span> {isAdmin && <span className="text-pink-600">(Admin)</span>}
               </span>
               <button
                 onClick={logout}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 text-xs sm:text-sm md:text-base rounded-lg sm:rounded-xl font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 whitespace-nowrap"
               >
                 Logout
               </button>
@@ -136,7 +170,7 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {isAdmin && (
           <AdminPanel
             onAdd={handleAddSweet}
@@ -165,8 +199,14 @@ const Dashboard = () => {
         />
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+          <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded mb-4 shadow-md">
+            <p className="font-medium">{error}</p>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="bg-green-50 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded mb-4 shadow-md">
+            <p className="font-medium">{successMessage}</p>
           </div>
         )}
 
@@ -179,7 +219,7 @@ const Dashboard = () => {
             <div className="text-xl text-gray-600">No sweets found</div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {sweets.map((sweet) => (
               <SweetCard
                 key={sweet._id}
@@ -193,6 +233,7 @@ const Dashboard = () => {
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   )

@@ -10,11 +10,11 @@ const SearchBar = ({
   onReset
 }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 className="text-xl font-bold mb-4 text-gray-800">Search & Filter</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6">
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-gray-800">Search & Filter</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
             Search by Name
           </label>
           <input
@@ -22,18 +22,18 @@ const SearchBar = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Enter sweet name..."
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-3 py-2 text-sm sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
             Category
           </label>
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-3 py-2 text-sm sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
           >
             <option value="">All Categories</option>
             {categories.map((cat) => (
@@ -45,8 +45,8 @@ const SearchBar = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Min Price
+          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+            Min Price (₹)
           </label>
           <input
             type="number"
@@ -57,13 +57,13 @@ const SearchBar = ({
               setPriceRange({ ...priceRange, min: e.target.value })
             }
             placeholder="0.00"
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-3 py-2 text-sm sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Max Price
+          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+            Max Price (₹)
           </label>
           <input
             type="number"
@@ -74,21 +74,21 @@ const SearchBar = ({
               setPriceRange({ ...priceRange, max: e.target.value })
             }
             placeholder="100.00"
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-3 py-2 text-sm sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
       </div>
 
-      <div className="flex gap-2 mt-4">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 mt-3 sm:mt-4">
         <button
           onClick={onSearch}
-          className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded font-semibold"
+          className="flex-1 sm:flex-none bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
         >
           Search
         </button>
         <button
           onClick={onReset}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded font-semibold"
+          className="flex-1 sm:flex-none bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
         >
           Reset
         </button>
