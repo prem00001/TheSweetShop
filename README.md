@@ -164,8 +164,8 @@ sweet-shop-management/
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/sweet-shop-management.git
-cd sweet-shop-management
+git clone https://github.com/prem00001/TheSweetShop.git
+cd TheSweetShop
 ```
 
 ### Step 2: Backend Setup
