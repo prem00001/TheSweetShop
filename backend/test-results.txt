@@ -1,0 +1,88 @@
+﻿
+> sweet-shop-backend@1.0.0 test
+> jest --watchAll=false
+
+node.exe : PASS __tests__/auth.test.js (6.658 s)
+At C:\Program Files\nodejs\npm.ps1:29 char:3
++   & $NODE_EXE $NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS __tests__/auth.test.js (6.658 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Authentication API
+    POST /api/auth/register
+      ΓêÜ should register a new user with default role "user" (742 ms)
+      ΓêÜ should hash password before saving (336 ms)
+      ΓêÜ should return 400 if email already exists (343 ms)
+      ΓêÜ should return 400 if required fields are missing (61 ms)
+    POST /api/auth/login
+      ΓêÜ should login with valid credentials (467 ms)
+      ΓêÜ should return 401 with invalid password (450 ms)
+      ΓêÜ should return 401 with non-existent email (333 ms)
+
+FAIL __tests__/sweets.test.js (19.122 s)
+  Sweets API
+    POST /api/sweets (Admin only)
+      ├ù should create a new sweet as admin (1209 ms)
+      ├ù should return 403 if regular user tries to create sweet (687 ms)
+      ΓêÜ should return 401 if no token provided (712 ms)
+    GET /api/sweets
+      ΓêÜ should get all sweets for authenticated user (971 ms)
+      ΓêÜ should return 401 if no token provided (841 ms)
+    GET /api/sweets/search
+      ΓêÜ should search sweets by name (960 ms)
+      ΓêÜ should search sweets by category (912 ms)
+      ΓêÜ should search sweets by price range (880 ms)
+    PUT /api/sweets/:id (Admin only)
+      ΓêÜ should update sweet as admin (893 ms)
+      ΓêÜ should return 403 if regular user tries to update (871 ms)
+    DELETE /api/sweets/:id (Admin only)
+      ΓêÜ should delete sweet as admin (913 ms)
+      ΓêÜ should return 403 if regular user tries to delete (823 ms)
+    POST /api/sweets/:id/purchase
+      ΓêÜ should decrease quantity when purchasing (951 ms)
+      ΓêÜ should block purchase when stock is zero (912 ms)
+      ΓêÜ should return 401 if no token provided (772 ms)
+    POST /api/sweets/:id/restock (Admin only)
+      ΓêÜ should increase quantity when restocking as admin (1006 ms)
+      ΓêÜ should return 403 if regular user tries to restock (821 ms)
+
+  ΓùÅ Sweets API ΓÇ║ POST /api/sweets (Admin only) ΓÇ║ should create a new sweet as admin
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 401
+
+      71 |         });
+      72 |
+    > 73 |       expect(response.status).toBe(201);
+         |                               ^
+      74 |       expect(response.body).toHaveProperty('_id');
+      75 |       expect(response.body.name).toBe('Chocolate Bar');
+      76 |       expect(response.body.category).toBe('Chocolate');
+
+      at Object.toBe (__tests__/sweets.test.js:73:31)
+
+  ΓùÅ Sweets API ΓÇ║ POST /api/sweets (Admin only) ΓÇ║ should return 403 if regular user tries to create sweet
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 401
+
+      90 |         });
+      91 |
+    > 92 |       expect(response.status).toBe(403);
+         |                               ^
+      93 |     });
+      94 |
+      95 |     it('should return 401 if no token provided', async () => {
+
+      at Object.toBe (__tests__/sweets.test.js:92:31)
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       2 failed, 22 passed, 24 total
+Snapshots:   0 total
+Time:        19.852 s
+Ran all test suites.
