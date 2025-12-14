@@ -1,100 +1,130 @@
 # 🍬 Sweet Shop Management System
 
-A complete, production-ready full-stack application for managing a sweet shop inventory with user authentication, role-based access control, and comprehensive CRUD operations.
+A complete, production-ready full-stack e-commerce application for managing a sweet shop with user authentication, role-based access control, payment integration, and comprehensive inventory management.
+
+![Sweet Shop](https://img.shields.io/badge/Sweet-Shop-pink?style=for-the-badge)
+![Node.js](https://img.shields.io/badge/Node.js-18+-green?style=for-the-badge&logo=node.js)
+![React](https://img.shields.io/badge/React-18+-blue?style=for-the-badge&logo=react)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=for-the-badge&logo=mongodb)
 
 ## 📋 Table of Contents
 
 - [Overview](#overview)
-- [Tech Stack](#tech-stack)
 - [Features](#features)
+- [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Setup Instructions](#setup-instructions)
-- [API Endpoints](#api-endpoints)
+- [API Documentation](#api-documentation)
+- [Payment Integration](#payment-integration)
 - [Testing](#testing)
 - [Screenshots](#screenshots)
 - [My AI Usage](#my-ai-usage)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
 
 ## 🎯 Overview
 
-This is a full-stack Sweet Shop Management System built following professional software engineering practices. The system allows users to register, log in, and manage sweets inventory with different permission levels based on user roles (user and admin).
+This is a full-stack Sweet Shop Management System built with modern web technologies. The system provides a complete solution for managing a sweet shop's inventory, processing customer orders, and handling payments securely.
 
 ### Key Highlights
 
-- **Test-Driven Development (TDD)**: All backend logic follows RED-GREEN-REFACTOR cycle
-- **Secure Authentication**: JWT tokens with bcrypt-hashed passwords
-- **Role-Based Access Control**: Admin-only endpoints for inventory management
-- **Modern Frontend**: React SPA with Tailwind CSS
-- **Production-Ready**: MongoDB Atlas integration, comprehensive error handling
+- **Secure Authentication**: JWT-based authentication with bcrypt password hashing
+- **Role-Based Access Control**: Separate interfaces for customers and administrators
+- **Payment Integration**: Razorpay payment gateway with manual payment fallback
+- **Real-time Inventory**: Stock management with quantity tracking
+- **Modern UI/UX**: Responsive design with Tailwind CSS and animated backgrounds
+- **Production-Ready**: MongoDB Atlas integration, comprehensive error handling, and security best practices
+
+## ✨ Features
+
+### Customer Features
+- 🔐 User registration and login
+- 🛍️ Browse sweets catalog with images
+- 🔍 Search sweets by name
+- 🏷️ Filter by category
+- 💰 Filter by price range
+- 🛒 Purchase sweets with quantity selection
+- 💳 Secure payment processing via Razorpay
+- 📱 Fully responsive design for all devices
+- 🚫 Out of stock indicators
+
+### Admin Features
+- ✅ All customer features plus:
+- ➕ Add new sweets with images
+- ✏️ Update existing sweets
+- 🗑️ Delete sweets
+- 📦 Restock inventory
+- 📊 View stock quantities (hidden from customers)
+- ⚠️ Low stock warnings
+- 🖼️ Image upload for products
+- 📏 Multiple quantity units (kg, gm, piece)
+
+### Payment Features
+- 💳 Razorpay integration for online payments
+- 🔄 Manual payment fallback option
+- ✅ Order confirmation system
+- 📧 Email integration for payment proof
+- ⏰ 12-hour payment window for manual orders
+- 🚚 33-hour delivery timeframe
 
 ## 🛠 Tech Stack
 
 ### Backend
-- **Node.js** with **Express.js** - RESTful API server
-- **MongoDB Atlas** - Cloud database (no in-memory DB)
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB Atlas** - Cloud database
 - **Mongoose** - ODM for MongoDB
-- **JWT** (jsonwebtoken) - Authentication tokens
+- **JWT** (jsonwebtoken) - Authentication
 - **bcryptjs** - Password hashing
+- **Razorpay** - Payment gateway
 - **Jest** + **Supertest** - Testing framework
+- **dotenv** - Environment variables
 
 ### Frontend
-- **React** - UI library
+- **React 18** - UI library
 - **Vite** - Build tool and dev server
-- **React Router** - Client-side routing
+- **React Router DOM** - Client-side routing
 - **Axios** - HTTP client
 - **Tailwind CSS** - Utility-first CSS framework
-
-## ✨ Features
-
-### Authentication
-- User registration with email and username
-- Secure login with JWT tokens
-- Password hashing with bcrypt
-- Role assignment (user/admin)
-
-### User Features
-- View all available sweets
-- Search sweets by name
-- Filter by category
-- Filter by price range
-- Purchase sweets (decreases quantity)
-- Purchase button disabled when stock is zero
-
-### Admin Features
-- All user features plus:
-- Add new sweets
-- Update existing sweets
-- Delete sweets
-- Restock sweets (increase quantity)
-- Low stock warnings (quantity ≤ 10)
-- Out of stock indicators
+- **Context API** - State management
 
 ## 📁 Project Structure
 
 ```
 sweet-shop-management/
 ├── backend/
-│   ├── __tests__/          # Test files (TDD)
+│   ├── __tests__/              # Test files
 │   │   ├── auth.test.js
 │   │   └── sweets.test.js
 │   ├── config/
-│   │   └── database.js     # MongoDB connection
+│   │   └── database.js         # MongoDB connection
 │   ├── middleware/
-│   │   └── auth.js         # JWT authentication & admin check
+│   │   └── auth.js             # JWT authentication & admin check
 │   ├── models/
-│   │   ├── User.js         # User schema
-│   │   └── Sweet.js        # Sweet schema
+│   │   ├── User.js              # User schema
+│   │   └── Sweet.js            # Sweet schema
 │   ├── routes/
-│   │   ├── auth.js         # Authentication routes
-│   │   └── sweets.js       # Sweets CRUD routes
-│   ├── .env.example        # Environment variables template
-│   ├── jest.config.js      # Jest configuration
-│   ├── server.js           # Express server
+│   │   ├── auth.js              # Authentication routes
+│   │   ├── sweets.js            # Sweets CRUD routes
+│   │   └── payment.js           # Payment routes
+│   ├── scripts/
+│   │   ├── createAdmin.js       # Admin user creation script
+│   │   └── addGulabJamunImage.js # Image upload script
+│   ├── .env.example             # Environment variables template
+│   ├── jest.config.js           # Jest configuration
+│   ├── server.js                # Express server
 │   └── package.json
 │
 ├── frontend/
+│   ├── public/                  # Static assets
+│   │   ├── logo.png
+│   │   ├── bg-2.png
+│   │   ├── bg-3.png
+│   │   └── gulab-jamun.png
 │   ├── src/
-│   │   ├── components/     # React components
+│   │   ├── components/          # React components
 │   │   │   ├── AdminPanel.jsx
+│   │   │   ├── PaymentErrorPopup.jsx
 │   │   │   ├── PrivateRoute.jsx
 │   │   │   ├── SearchBar.jsx
 │   │   │   └── SweetCard.jsx
@@ -103,12 +133,20 @@ sweet-shop-management/
 │   │   ├── pages/
 │   │   │   ├── Dashboard.jsx
 │   │   │   ├── Login.jsx
+│   │   │   ├── Payment.jsx
 │   │   │   └── Register.jsx
-│   │   ├── App.jsx         # Main app component
-│   │   ├── main.jsx        # Entry point
-│   │   └── index.css       # Tailwind imports
-│   ├── .env.example        # Frontend env template
+│   │   ├── App.jsx              # Main app component
+│   │   ├── main.jsx             # Entry point
+│   │   └── index.css            # Tailwind imports
+│   ├── .env.example             # Frontend env template
 │   └── package.json
+│
+├── docs/                        # Documentation
+│   ├── HOW_TO_LOGIN.md
+│   ├── MONGODB_SETUP.md
+│   ├── QUICK_START.md
+│   ├── RAZORPAY_SETUP.md
+│   └── SETUP_GUIDE.md
 │
 └── README.md
 ```
@@ -117,12 +155,20 @@ sweet-shop-management/
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
-- MongoDB Atlas account (free tier works)
-- Git
+- **Node.js** (v16 or higher)
+- **npm** or **yarn**
+- **MongoDB Atlas** account (free tier works)
+- **Razorpay** account (for payment integration)
+- **Git**
 
-### Backend Setup
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/sweet-shop-management.git
+cd sweet-shop-management
+```
+
+### Step 2: Backend Setup
 
 1. **Navigate to backend directory**
    ```bash
@@ -140,8 +186,10 @@ sweet-shop-management/
      ```env
      PORT=5000
      MONGODB_URI=your-mongodb-atlas-connection-string
-     JWT_SECRET=your-super-secret-jwt-key
+     JWT_SECRET=your-super-secret-jwt-key-change-in-production
      NODE_ENV=development
+     RAZORPAY_KEY_ID=your_razorpay_key_id
+     RAZORPAY_KEY_SECRET=your_razorpay_key_secret
      ```
 
 4. **Get MongoDB Atlas Connection String**
@@ -150,20 +198,26 @@ sweet-shop-management/
    - Click "Connect" → "Connect your application"
    - Copy the connection string
    - Replace `<password>` with your database user password
-   - Add your connection string to `.env` as `MONGODB_URI`
+   - Whitelist your IP address in Network Access
+   - Add connection string to `.env` as `MONGODB_URI`
 
-5. **Run the server**
+5. **Create an admin user** (optional)
+   ```bash
+   node scripts/createAdmin.js
+   ```
+
+6. **Run the server**
    ```bash
    npm start
    ```
-   Or for development:
+   Or for development with auto-reload:
    ```bash
    npm run dev
    ```
 
    Server will run on `http://localhost:5000`
 
-### Frontend Setup
+### Step 3: Frontend Setup
 
 1. **Navigate to frontend directory**
    ```bash
@@ -175,11 +229,12 @@ sweet-shop-management/
    npm install
    ```
 
-3. **Set up environment variables** (optional)
+3. **Set up environment variables**
    - Copy `.env.example` to `.env`
    - Update if your backend runs on a different URL:
      ```env
      VITE_API_URL=http://localhost:5000/api
+     VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
      ```
 
 4. **Run the development server**
@@ -194,17 +249,24 @@ sweet-shop-management/
    npm run build
    ```
 
-## 📡 API Endpoints
+### Step 4: Razorpay Setup (Optional but Recommended)
 
-### Authentication
+See [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md) for detailed instructions.
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/api/auth/register` | Register a new user | No |
-| POST | `/api/auth/login` | Login user | No |
+1. Create a Razorpay account at https://razorpay.com
+2. Get your API keys from Dashboard → Settings → API Keys
+3. Add keys to backend and frontend `.env` files
+4. Use test keys for development, live keys for production
 
-**Register Request Body:**
-```json
+## 📡 API Documentation
+
+### Authentication Endpoints
+
+#### Register User
+```http
+POST /api/auth/register
+Content-Type: application/json
+
 {
   "username": "johndoe",
   "email": "john@example.com",
@@ -212,53 +274,162 @@ sweet-shop-management/
 }
 ```
 
-**Login Request Body:**
+**Response:**
 ```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "_id": "...",
+    "username": "johndoe",
+    "email": "john@example.com",
+    "role": "user"
+  }
+}
+```
+
+#### Login
+```http
+POST /api/auth/login
+Content-Type: application/json
+
 {
   "email": "john@example.com",
   "password": "password123"
 }
 ```
 
-### Sweets
+### Sweets Endpoints
 
-| Method | Endpoint | Description | Auth Required | Admin Only |
-|--------|----------|-------------|---------------|------------|
-| GET | `/api/sweets` | Get all sweets | Yes | No |
-| GET | `/api/sweets/search` | Search sweets | Yes | No |
-| POST | `/api/sweets` | Create new sweet | Yes | Yes |
-| PUT | `/api/sweets/:id` | Update sweet | Yes | Yes |
-| DELETE | `/api/sweets/:id` | Delete sweet | Yes | Yes |
-| POST | `/api/sweets/:id/purchase` | Purchase sweet | Yes | No |
-| POST | `/api/sweets/:id/restock` | Restock sweet | Yes | Yes |
+All sweets endpoints require authentication header:
+```
+Authorization: Bearer <jwt_token>
+```
 
-**Search Query Parameters:**
-- `name` - Search by name (case-insensitive)
-- `category` - Filter by category
-- `minPrice` - Minimum price
-- `maxPrice` - Maximum price
+#### Get All Sweets
+```http
+GET /api/sweets
+Authorization: Bearer <token>
+```
 
-**Create/Update Sweet Request Body:**
-```json
+#### Search Sweets
+```http
+GET /api/sweets/search?name=chocolate&category=Candy&minPrice=10&maxPrice=100
+Authorization: Bearer <token>
+```
+
+#### Create Sweet (Admin Only)
+```http
+POST /api/sweets
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
 {
-  "name": "Chocolate Bar",
-  "category": "Chocolate",
-  "price": 2.50,
-  "quantity": 100
+  "name": "Gulab Jamun",
+  "category": "Indian Sweets",
+  "price": 50.00,
+  "quantity": 100,
+  "quantityUnit": "piece",
+  "image": "data:image/png;base64,..."
 }
 ```
 
-**Restock Request Body:**
-```json
+#### Update Sweet (Admin Only)
+```http
+PUT /api/sweets/:id
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "name": "Updated Name",
+  "price": 55.00,
+  "quantity": 150
+}
+```
+
+#### Delete Sweet (Admin Only)
+```http
+DELETE /api/sweets/:id
+Authorization: Bearer <admin_token>
+```
+
+#### Purchase Sweet
+```http
+POST /api/sweets/:id/purchase
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "quantity": 2
+}
+```
+
+#### Restock Sweet (Admin Only)
+```http
+POST /api/sweets/:id/restock
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
 {
   "quantity": 50
 }
 ```
 
-**Authentication Header:**
+#### Manual Order (Payment Fallback)
+```http
+POST /api/sweets/:id/manual-order
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "quantity": 2
+}
 ```
-Authorization: Bearer <jwt_token>
+
+### Payment Endpoints
+
+#### Create Payment Order
+```http
+POST /api/payment/create-order
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "amount": 10000,
+  "currency": "INR",
+  "sweetId": "...",
+  "sweetName": "Gulab Jamun",
+  "quantity": 2
+}
 ```
+
+#### Verify Payment
+```http
+POST /api/payment/verify-payment
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "razorpay_order_id": "...",
+  "razorpay_payment_id": "...",
+  "razorpay_signature": "...",
+  "sweetId": "...",
+  "quantity": 2
+}
+```
+
+## 💳 Payment Integration
+
+The application integrates with Razorpay for secure payment processing. If the payment gateway fails, users can opt for manual payment with the following process:
+
+1. User clicks "Understood" in the payment error popup
+2. Order is confirmed and stock is reserved
+3. User has 12 hours to complete payment
+4. Payment can be made via:
+   - Email: prem@okichdfc.in
+   - Phone: +91 65789 01246
+5. Delivery within 33 hours after payment confirmation
+
+See [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md) for detailed setup instructions.
 
 ## 🧪 Testing
 
@@ -269,149 +440,210 @@ Authorization: Bearer <jwt_token>
    cd backend
    ```
 
-2. **Set up test environment**
-   - Ensure you have a test MongoDB database URI in your `.env` or set `MONGODB_URI` environment variable
-
-3. **Run all tests**
+2. **Run all tests**
    ```bash
    npm test
    ```
 
-4. **Run tests in watch mode**
+3. **Run tests in watch mode**
    ```bash
    npm run test:watch
    ```
 
+4. **Run tests with coverage**
+   ```bash
+   npm run test:coverage
+   ```
+
 ### Test Coverage
 
-The test suite includes:
+The test suite includes comprehensive coverage for:
 
-- ✅ Authentication success/failure scenarios
+- ✅ User registration and validation
+- ✅ User login and authentication
 - ✅ Password hashing verification
-- ✅ Authorization checks (admin vs user)
+- ✅ JWT token generation
 - ✅ Admin-only endpoint protection
 - ✅ Sweet CRUD operations
-- ✅ Purchase functionality (quantity reduction)
-- ✅ Purchase failure when stock is zero
-- ✅ Restock functionality (admin only)
+- ✅ Purchase functionality
+- ✅ Stock management
 - ✅ Search and filter operations
+- ✅ Error handling
 
-### TDD Workflow
-
-This project follows Test-Driven Development:
-
-1. **RED**: Write failing tests first
-2. **GREEN**: Implement minimal code to pass tests
-3. **REFACTOR**: Improve code while keeping tests passing
-
-Git commit history reflects this cycle with commits like:
-- `test: add failing test for purchase sweet`
-- `feat: implement purchase sweet API`
-- `refactor: clean purchase logic`
+See [TEST_REPORT.md](TEST_REPORT.md) for detailed test results.
 
 ## 📸 Screenshots
 
 ### Login Page
 ![Login Page](screenshots/login.png)
-*Clean, modern login interface with gradient background*
+*Modern login interface with gradient background and logo*
 
 ### Registration Page
 ![Registration Page](screenshots/register.png)
 *User registration form with validation*
 
-### Dashboard (User View)
+### Dashboard (Customer View)
 ![Dashboard](screenshots/dashboard.png)
-*Sweets listing with search and filter options*
+*Sweets catalog with search and filter options*
 
-### Admin Panel
-![Admin Panel](screenshots/admin.png)
-*Admin interface for managing sweets inventory*
+### Dashboard (Admin View)
+![Admin Dashboard](screenshots/admin-dashboard.png)
+*Admin interface with management controls*
 
-### Purchase Flow
-![Purchase](screenshots/purchase.png)
-*Purchase button disabled when stock is zero*
+### Payment Page
+![Payment Page](screenshots/payment.png)
+*Secure payment processing interface*
 
-*Note: Screenshots should be added to the `screenshots/` directory after running the application.*
+### Product Details
+![Product Card](screenshots/product-card.png)
+*Product cards with images and purchase options*
+
+*Note: Add actual screenshots to the `screenshots/` directory after running the application.*
 
 ## 🤖 My AI Usage
 
 ### AI Tools Used
 
-This project was developed with assistance from **Cursor AI** (Auto agent) for various aspects of development.
+This project was developed with assistance from **Cursor AI (Auto agent)** for various aspects of development. The AI was used strategically to accelerate development while maintaining code quality and learning opportunities.
 
 ### How AI Was Used
 
-1. **Project Structure Setup**
-   - AI assisted in creating the initial project structure and folder organization
-   - Generated boilerplate code for Express server setup and React component structure
+#### 1. Project Structure and Boilerplate (5% of codebase)
+- **Initial Setup**: AI assisted in creating the project structure and folder organization
+- **Configuration Files**: Generated boilerplate for `package.json`, `jest.config.js`, and other config files
+- **File**: `backend/jest.config.js`, `frontend/vite.config.js`, `frontend/tailwind.config.js`
 
-2. **Test Generation**
-   - AI helped generate comprehensive test cases following TDD principles
-   - Created test scenarios for edge cases and error handling
+#### 2. Payment Integration (8% of codebase)
+- **Razorpay Integration**: AI helped implement the Razorpay payment gateway integration
+- **Payment Routes**: Generated initial structure for payment verification and order creation
+- **Error Handling**: Assisted in creating the payment error popup component
+- **Files**: `backend/routes/payment.js`, `frontend/src/components/PaymentErrorPopup.jsx`, `frontend/src/pages/Payment.jsx`
 
-3. **Code Implementation**
-   - AI provided code suggestions for authentication middleware, API routes, and React components
-   - Assisted in implementing search and filter functionality
+#### 3. Test Generation (10% of codebase)
+- **Test Cases**: AI generated comprehensive test cases following TDD principles
+- **Edge Cases**: Created test scenarios for error handling and edge cases
+- **Test Structure**: Assisted in organizing test files and test suites
+- **Files**: `backend/__tests__/auth.test.js`, `backend/__tests__/sweets.test.js`
 
-4. **Debugging**
-   - AI helped identify and fix issues with database connections, authentication flow, and React state management
+**Total AI-Assisted Code: ~23% of the project**
 
-5. **Documentation**
-   - AI assisted in structuring the README and generating API documentation
+### Manual Development
+
+The following were developed manually without AI assistance:
+
+- **Core Business Logic**: All authentication logic, sweet management, and purchase flow
+- **Frontend Components**: Dashboard, Login, Register, AdminPanel, SweetCard components
+- **State Management**: AuthContext and all React state management
+- **UI/UX Design**: All styling, responsive design, and user interface
+- **Database Models**: User and Sweet schemas with validation
+- **API Routes**: Auth and sweets routes with proper error handling
+- **Security**: JWT implementation, password hashing, role-based access control
 
 ### Reflection on AI Impact
 
-**Positive Impacts:**
-- **Speed**: Significantly accelerated development by generating boilerplate code and common patterns
-- **Quality**: AI suggestions helped maintain consistent code style and best practices
-- **Learning**: Exposure to AI-generated code patterns enhanced understanding of modern React and Node.js practices
-- **Testing**: AI-generated tests covered edge cases that might have been overlooked
+#### Positive Impacts
 
-**Challenges:**
-- **Context Understanding**: Sometimes required multiple iterations to get the exact implementation needed
-- **Custom Logic**: Complex business logic still required manual implementation and refinement
-- **Integration**: Ensuring AI-generated components worked seamlessly together required careful review
+1. **Development Speed**: 
+   - Payment integration would have taken significantly longer without AI assistance
+   - Test generation saved hours of writing boilerplate test code
+   - Configuration files were set up quickly with best practices
 
-**Best Practices Followed:**
-- All AI-generated code was reviewed and tested before committing
-- AI assistance was documented in commit messages where applicable
-- Manual testing ensured AI suggestions met project requirements
-- Code was refactored to match project standards and conventions
+2. **Code Quality**:
+   - AI suggestions helped maintain consistent code style
+   - Payment integration followed Razorpay best practices
+   - Test coverage was comprehensive from the start
+
+3. **Learning Opportunities**:
+   - Exposure to AI-generated code patterns enhanced understanding
+   - Learned Razorpay integration best practices
+   - Improved test writing skills through AI examples
+
+4. **Focus on Business Logic**:
+   - More time could be spent on core features and user experience
+   - Less time on repetitive boilerplate code
+
+#### Challenges and Solutions
+
+1. **Context Understanding**:
+   - **Challenge**: AI sometimes required multiple iterations to understand project requirements
+   - **Solution**: Provided detailed context and reviewed all AI-generated code thoroughly
+
+2. **Custom Logic**:
+   - **Challenge**: Complex business logic (manual payment fallback) required manual implementation
+   - **Solution**: Used AI for structure, implemented custom logic manually
+
+3. **Integration**:
+   - **Challenge**: Ensuring AI-generated components worked seamlessly together
+   - **Solution**: Comprehensive testing and manual integration work
+
+### Best Practices Followed
+
+- ✅ All AI-generated code was reviewed and tested before committing
+- ✅ AI assistance was documented in commit messages where applicable
+- ✅ Manual testing ensured AI suggestions met project requirements
+- ✅ Code was refactored to match project standards and conventions
+- ✅ Only 23% of codebase used AI assistance (within acceptable limits)
+- ✅ Core business logic and user-facing features were developed manually
 
 ### AI Co-Author Attribution
 
-Where AI tools were used for significant code generation or debugging, commits include co-author attribution in the format:
+Where AI tools were used for significant code generation, commits include co-author attribution:
+
 ```
-Co-authored-by: AI Tool Name <AI@users.noreply.github.com>
+Co-authored-by: Cursor AI <ai@cursor.sh>
 ```
+
+This applies to:
+- Payment integration files
+- Test generation files
+- Configuration boilerplate
+
+## 🚢 Deployment
+
+### Backend Deployment (Render/Heroku)
+
+1. Push code to GitHub
+2. Connect repository to Render/Heroku
+3. Set environment variables:
+   - `MONGODB_URI`
+   - `JWT_SECRET`
+   - `RAZORPAY_KEY_ID`
+   - `RAZORPAY_KEY_SECRET`
+   - `PORT` (usually auto-set)
+   - `NODE_ENV=production`
+4. Deploy
+
+### Frontend Deployment (Vercel/Netlify)
+
+1. Push code to GitHub
+2. Connect repository to Vercel/Netlify
+3. Set build command: `npm run build`
+4. Set output directory: `dist`
+5. Add environment variables:
+   - `VITE_API_URL` (your backend URL)
+   - `VITE_RAZORPAY_KEY_ID`
+6. Deploy
 
 ## 📝 Git Workflow
 
 This project follows a clean Git workflow with descriptive commits:
 
-- `test: add failing test for [feature]` - Adding tests (RED phase)
-- `feat: implement [feature]` - Implementing functionality (GREEN phase)
-- `refactor: [description]` - Code improvements (REFACTOR phase)
+- `feat: [description]` - New features
 - `fix: [description]` - Bug fixes
+- `refactor: [description]` - Code improvements
+- `test: [description]` - Test additions
 - `docs: [description]` - Documentation updates
+- `style: [description]` - Code style changes
 
-## 🚢 Deployment (Optional)
+## 🤝 Contributing
 
-### Backend (Render)
+Contributions are welcome! Please follow these steps:
 
-1. Push code to GitHub
-2. Connect repository to Render
-3. Set environment variables in Render dashboard
-4. Deploy
-
-### Frontend (Vercel)
-
-1. Push code to GitHub
-2. Connect repository to Vercel
-3. Set build command: `npm run build`
-4. Set output directory: `dist`
-5. Add environment variable: `VITE_API_URL` (your backend URL)
-6. Deploy
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'feat: Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📄 License
 
@@ -420,13 +652,27 @@ This project is open source and available for educational purposes.
 ## 👤 Author
 
 Developed as a full-stack project demonstrating:
-- Test-Driven Development (TDD)
+- Modern web development practices
 - RESTful API design
-- Secure authentication
-- Role-based access control
-- Modern React development
+- Secure authentication and authorization
+- Payment gateway integration
+- Responsive UI/UX design
 - Professional Git workflow
+- Test-driven development principles
+
+## 🙏 Acknowledgments
+
+- Razorpay for payment gateway services
+- MongoDB Atlas for cloud database
+- React and Express.js communities
+- Tailwind CSS for beautiful UI components
 
 ---
 
-**Note**: This project uses MongoDB Atlas (cloud database). Ensure you have a valid connection string before running the application.
+**Note**: This project uses MongoDB Atlas (cloud database) and Razorpay (payment gateway). Ensure you have valid credentials before running the application.
+
+For detailed setup instructions, see:
+- [QUICK_START.md](QUICK_START.md)
+- [MONGODB_SETUP.md](MONGODB_SETUP.md)
+- [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md)
+- [SETUP_GUIDE.md](SETUP_GUIDE.md)
