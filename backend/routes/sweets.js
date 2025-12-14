@@ -43,9 +43,9 @@ router.get('/search', protect, async (req, res) => {
 // Create sweet (admin only)
 router.post('/', protect, admin, async (req, res) => {
   try {
-    const { name, category, price, quantity } = req.body;
+    const { name, category, price, quantity, quantityUnit, image } = req.body;
 
-    if (!name || !category || price === undefined || quantity === undefined) {
+    if (!name || !category || price === undefined || quantity === undefined || !quantityUnit) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -53,7 +53,9 @@ router.post('/', protect, admin, async (req, res) => {
       name,
       category,
       price: parseFloat(price),
-      quantity: parseInt(quantity)
+      quantity: parseFloat(quantity),
+      quantityUnit,
+      image: image || ''
     });
 
     res.status(201).json(sweet);
@@ -68,13 +70,21 @@ router.post('/', protect, admin, async (req, res) => {
 // Update sweet (admin only)
 router.put('/:id', protect, admin, async (req, res) => {
   try {
-    const { name, category, price, quantity } = req.body;
+    const { name, category, price, quantity, quantityUnit, image } = req.body;
     const updateData = {};
 
     if (name) updateData.name = name;
     if (category) updateData.category = category;
     if (price !== undefined) updateData.price = parseFloat(price);
-    if (quantity !== undefined) updateData.quantity = parseInt(quantity);
+    if (quantity !== undefined) {
+      // If quantityUnit is 'piece', ensure quantity is a whole number
+      const qty = quantityUnit === 'piece' 
+        ? Math.round(parseFloat(quantity)) 
+        : parseFloat(quantity);
+      updateData.quantity = qty;
+    }
+    if (quantityUnit) updateData.quantityUnit = quantityUnit;
+    if (image !== undefined) updateData.image = image;
 
     const sweet = await Sweet.findByIdAndUpdate(
       req.params.id,
@@ -110,6 +120,9 @@ router.delete('/:id', protect, admin, async (req, res) => {
 // Purchase sweet (decrease quantity)
 router.post('/:id/purchase', protect, async (req, res) => {
   try {
+    const { quantity: purchaseQuantity } = req.body;
+    const quantityToPurchase = parseFloat(purchaseQuantity) || 1;
+
     const sweet = await Sweet.findById(req.params.id);
 
     if (!sweet) {
@@ -120,12 +133,76 @@ router.post('/:id/purchase', protect, async (req, res) => {
       return res.status(400).json({ message: 'Sweet is out of stock' });
     }
 
-    sweet.quantity -= 1;
+    if (sweet.quantity < quantityToPurchase) {
+      return res.status(400).json({ 
+        message: `Only ${sweet.quantity} ${sweet.quantityUnit} available` 
+      });
+    }
+
+    sweet.quantity -= quantityToPurchase;
     await sweet.save();
 
     res.json(sweet);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// Manual order (when payment gateway fails, order confirmed but payment pending)
+router.post('/:id/manual-order', protect, async (req, res) => {
+  try {
+    const { quantity: orderQuantity } = req.body;
+    
+    // Parse quantity properly
+    let quantityToOrder = 1;
+    if (orderQuantity !== undefined && orderQuantity !== null) {
+      quantityToOrder = parseFloat(orderQuantity);
+      if (isNaN(quantityToOrder) || quantityToOrder <= 0) {
+        quantityToOrder = 1;
+      }
+    }
+
+    const sweet = await Sweet.findById(req.params.id);
+
+    if (!sweet) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Sweet not found' 
+      });
+    }
+
+    if (sweet.quantity === 0) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Sweet is out of stock' 
+      });
+    }
+
+    if (sweet.quantity < quantityToOrder) {
+      return res.status(400).json({ 
+        success: false,
+        message: `Only ${sweet.quantity} ${sweet.quantityUnit || 'piece'} available` 
+      });
+    }
+
+    // Reserve the quantity (reduce stock)
+    sweet.quantity -= quantityToOrder;
+    await sweet.save();
+
+    // In a real application, you would create an Order record here
+    // For now, we just reduce the stock and return success
+
+    res.json({
+      success: true,
+      message: 'Order confirmed. Please complete payment within 12 hours.',
+      sweet: sweet
+    });
+  } catch (error) {
+    console.error('Manual order error:', error);
+    res.status(500).json({ 
+      success: false,
+      message: error.message || 'Failed to confirm order' 
+    });
   }
 });
 

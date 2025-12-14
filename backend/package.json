@@ -7,7 +7,10 @@
     "start": "node server.js",
     "dev": "node server.js",
     "test": "jest --watchAll=false",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "create-admin": "node scripts/createAdmin.js",
+    "test-connection": "node test-connection.js",
+    "add-gulab-jamun": "node scripts/addGulabJamunImage.js"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +22,9 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.4"
+    "mongoose": "^8.8.4",
+    "multer": "^2.0.2",
+    "razorpay": "^2.9.6"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

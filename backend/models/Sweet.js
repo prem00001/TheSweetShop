@@ -21,6 +21,16 @@ const sweetSchema = new mongoose.Schema({
     required: [true, 'Quantity is required'],
     min: [0, 'Quantity cannot be negative'],
     default: 0
+  },
+  quantityUnit: {
+    type: String,
+    enum: ['kg', 'gm', 'piece'],
+    default: 'piece',
+    required: [true, 'Quantity unit is required']
+  },
+  image: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true
