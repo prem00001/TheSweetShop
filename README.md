@@ -512,33 +512,6 @@ The test suite includes comprehensive coverage for:
 
 See [TEST_REPORT.md](TEST_REPORT.md) for detailed test results and coverage analysis.
 
-## 📸 Screenshots
-
-### Login Page
-![Login Page](screenshots/login.png)
-*Modern login interface with gradient background and logo*
-
-### Registration Page
-![Registration Page](screenshots/register.png)
-*User registration form with validation*
-
-### Dashboard (Customer View)
-![Dashboard](screenshots/dashboard.png)
-*Sweets catalog with search and filter options*
-
-### Dashboard (Admin View)
-![Admin Dashboard](screenshots/admin-dashboard.png)
-*Admin interface with management controls*
-
-### Payment Page
-![Payment Page](screenshots/payment.png)
-*Secure payment processing interface*
-
-### Product Details
-![Product Card](screenshots/product-card.png)
-*Product cards with images and purchase options*
-
-*Note: Add actual screenshots to the `screenshots/` directory after running the application.*
 
 ## 🤖 My AI Usage
 
