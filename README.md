@@ -142,11 +142,8 @@ sweet-shop-management/
 │   └── package.json
 │
 ├── docs/                        # Documentation
-│   ├── HOW_TO_LOGIN.md
-│   ├── MONGODB_SETUP.md
-│   ├── QUICK_START.md
-│   ├── RAZORPAY_SETUP.md
-│   └── SETUP_GUIDE.md
+│   ├── RAZORPAY_SETUP.md        # Detailed Razorpay setup guide
+│   └── TEST_REPORT.md           # Test results and coverage
 │
 └── README.md
 ```
@@ -192,14 +189,42 @@ cd TheSweetShop
      RAZORPAY_KEY_SECRET=your_razorpay_key_secret
      ```
 
-4. **Get MongoDB Atlas Connection String**
-   - Create a free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-   - Create a new cluster
-   - Click "Connect" → "Connect your application"
+4. **Get MongoDB Atlas Connection String** (Detailed Steps)
+   
+   **Step 1: Create Account**
+   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
+   - Sign up for a **FREE** account and verify email
+   
+   **Step 2: Create Cluster**
+   - Click "Build a Database"
+   - Choose **"FREE"** (M0) tier
+   - Select region and click "Create" (takes 3-5 minutes)
+   
+   **Step 3: Create Database User**
+   - Go to "Database Access" → "Add New Database User"
+   - Choose "Password" authentication
+   - Enter username and password (⚠️ **SAVE THE PASSWORD**)
+   - Select "Atlas admin" privileges
+   - Click "Add User"
+   
+   **Step 4: Whitelist IP Address**
+   - Go to "Network Access" → "Add IP Address"
+   - Click "Add Current IP Address" or "Allow Access from Anywhere" (0.0.0.0/0)
+   - Click "Confirm"
+   
+   **Step 5: Get Connection String**
+   - Go to "Database" → Click "Connect" on your cluster
+   - Choose "Connect your application"
+   - Select "Node.js" and version "5.5 or later"
    - Copy the connection string
    - Replace `<password>` with your database user password
-   - Whitelist your IP address in Network Access
-   - Add connection string to `.env` as `MONGODB_URI`
+   - Replace `<dbname>` with `sweet-shop` (or your preferred database name)
+   - Add to `.env` as `MONGODB_URI`
+   
+   **Example:**
+   ```env
+   MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/sweet-shop?retryWrites=true&w=majority
+   ```
 
 5. **Create an admin user** (optional)
    ```bash
@@ -251,12 +276,27 @@ cd TheSweetShop
 
 ### Step 4: Razorpay Setup (Optional but Recommended)
 
-See [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md) for detailed instructions.
-
+**Quick Setup:**
 1. Create a Razorpay account at https://razorpay.com
-2. Get your API keys from Dashboard → Settings → API Keys
-3. Add keys to backend and frontend `.env` files
-4. Use test keys for development, live keys for production
+2. Go to Dashboard → Settings → API Keys
+3. Get your **Key ID** (starts with `rzp_test_` for test mode)
+4. Get your **Key Secret** (click "Reveal" to see it)
+5. Add to `backend/.env`:
+   ```env
+   RAZORPAY_KEY_ID=your_key_id_here
+   RAZORPAY_KEY_SECRET=your_key_secret_here
+   ```
+6. Add to `frontend/.env`:
+   ```env
+   VITE_RAZORPAY_KEY_ID=your_key_id_here
+   ```
+7. Use test keys for development, live keys for production
+
+**Test Cards (Test Mode Only):**
+- **Success:** Card `4111 1111 1111 1111`, CVV: any 3 digits, Expiry: any future date
+- **Failure:** Card `4000 0000 0000 0002`, CVV: any 3 digits, Expiry: any future date
+
+> 💡 **Note:** For detailed Razorpay setup with troubleshooting, see [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md)
 
 ## 📡 API Documentation
 
@@ -470,7 +510,7 @@ The test suite includes comprehensive coverage for:
 - ✅ Search and filter operations
 - ✅ Error handling
 
-See [TEST_REPORT.md](TEST_REPORT.md) for detailed test results.
+See [TEST_REPORT.md](TEST_REPORT.md) for detailed test results and coverage analysis.
 
 ## 📸 Screenshots
 
@@ -671,8 +711,6 @@ Developed as a full-stack project demonstrating:
 
 **Note**: This project uses MongoDB Atlas (cloud database) and Razorpay (payment gateway). Ensure you have valid credentials before running the application.
 
-For detailed setup instructions, see:
-- [QUICK_START.md](QUICK_START.md)
-- [MONGODB_SETUP.md](MONGODB_SETUP.md)
-- [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md)
-- [SETUP_GUIDE.md](SETUP_GUIDE.md)
+**Additional Documentation:**
+- [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md) - Detailed Razorpay integration guide with troubleshooting
+- [TEST_REPORT.md](TEST_REPORT.md) - Comprehensive test results and coverage report
